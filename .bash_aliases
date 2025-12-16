@@ -1,5 +1,9 @@
 ### .bash_aliases
 
+# carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+source <(carapace _carapace)
+
 # fzf
 export FZF_DEFAULT_OPTS='--height 10 --border'
 eval "$(fzf --bash)"
