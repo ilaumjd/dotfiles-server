@@ -1,3 +1,5 @@
+-- Minimal Neovim config for VPS (no plugins)
+
 -- Leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
@@ -61,7 +63,7 @@ map("i", "jk", "<Esc>", { desc = "Exit insert mode" })
 map("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- File explorer
-map("n", "<Leader>e", "<cmd>Explore<CR>", { desc = "File explorer" })
+map("n", "-", "<cmd>Explore<CR>", { desc = "File explorer" })
 
 -- Save file
 map("n", "<Leader>w", "<cmd>w<CR>", { desc = "Save file" })
@@ -72,6 +74,27 @@ map("n", "<Leader>q", "<cmd>q<CR>", { desc = "Quit" })
 -- Buffer navigation
 map("n", "<S-h>", "<cmd>bprevious<CR>", { desc = "Prev buffer" })
 map("n", "<S-l>", "<cmd>bnext<CR>", { desc = "Next buffer" })
+
+-- Disable macro recording (toggle with <Leader>uq)
+vim.cmd "map q <Nop>"
+
+map("n", "<Leader>uq", function()
+  vim.g._macro_enabled = not vim.g._macro_enabled
+  if vim.g._macro_enabled then
+    vim.cmd "unmap q"
+    vim.notify "Macro recording enabled"
+  else
+    vim.cmd "map q <Nop>"
+    vim.notify "Macro recording disabled"
+  end
+end, { desc = "Toggle macro recording" })
+
+-- Highlight on yank
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.highlight.on_yank({ timeout = 200 })
+  end,
+})
 
 -- Colorscheme (built-in)
 vim.cmd.colorscheme("slate")
