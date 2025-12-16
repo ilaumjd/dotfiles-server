@@ -14,3 +14,6 @@ alias lg='lazygit'
 # zoxide
 alias cd='z'
 eval "$(zoxide init bash)"
+
+# atuin
+eval "$(atuin init bash --disable-up-arrow)"
