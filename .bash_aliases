@@ -1,4 +1,9 @@
+### .bash_aliases
+
+# fzf
+export FZF_DEFAULT_OPTS='--height 10 --border'
+eval "$(fzf --bash)"
 
 # zoxide
-eval "$(zoxide init bash)"
 alias cd='z'
+eval "$(zoxide init bash)"
