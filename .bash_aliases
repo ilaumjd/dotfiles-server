@@ -1,5 +1,10 @@
 ### .bash_aliases
 
+# aliases
+alias cd='z'
+alias ld='lazydocker'
+alias lg='lazygit'
+
 # carapace
 export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
 source <(carapace _carapace)
@@ -8,11 +13,7 @@ source <(carapace _carapace)
 export FZF_DEFAULT_OPTS='--height 10 --border'
 eval "$(fzf --bash)"
 
-# lazygit
-alias lg='lazygit'
-
 # zoxide
-alias cd='z'
 eval "$(zoxide init bash)"
 
 # atuin
