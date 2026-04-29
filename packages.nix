@@ -12,6 +12,7 @@ pkgs.buildEnv {
     btop
     carapace
     curl
+    delta
     fastfetch
     fd
     fzf
