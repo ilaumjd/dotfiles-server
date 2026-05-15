@@ -21,6 +21,7 @@ pkgs.buildEnv {
     jq
     lazydocker
     lazygit
+    mise
     neovim
     patch
     ripgrep
