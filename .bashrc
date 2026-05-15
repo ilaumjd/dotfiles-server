@@ -115,3 +115,11 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+#### USER SPACE
+eval "$(mise activate bash)"
+
+. "$HOME/.local/bin/env"
+
+# Hermes Agent — ensure ~/.local/bin is on PATH
+export PATH="$HOME/.local/bin:$PATH"
