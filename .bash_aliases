@@ -1,5 +1,8 @@
 ### .bash_aliases
 
+# mise
+eval "$(mise activate bash)"
+
 # aliases
 alias cd='z'
 alias ld='lazydocker'
@@ -18,3 +21,5 @@ eval "$(zoxide init bash)"
 
 # atuin
 eval "$(atuin init bash --disable-up-arrow)"
+
+
