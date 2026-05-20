@@ -26,10 +26,6 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Nix (multi-user / daemon)
-if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
-  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
-fi
 
 
 . "$HOME/.local/bin/env"
