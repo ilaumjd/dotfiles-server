@@ -16,7 +16,4 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
-# mise shims — on PATH for login shells (covers non-interactive SSH like "ssh host command").
-# Interactive shells get mise via .bashrc -> mise activate.
-export PATH="$HOME/.local/share/mise/shims:$PATH"
 
