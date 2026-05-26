@@ -20,3 +20,4 @@ fi
 # Interactive shells get mise via .bashrc -> mise activate.
 export PATH="$HOME/.local/share/mise/shims:$PATH"
 
+export MACHINE_NAME=tencent
