@@ -37,16 +37,16 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]tencent\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}tencent:\w\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
 unset color_prompt force_color_prompt
 
 # xterm title
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\033]0;${debian_chroot:+($debian_chroot)}tencent: \w\a\]$PS1"
+    PS1="\[\033]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
     ;;
 esac
 
@@ -62,7 +62,6 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 # Source aliases
 if [ -f ~/.bash_aliases ]; then
@@ -81,16 +80,28 @@ fi
 #### USER SPACE
 
 # Add ~/.local/bin to PATH if not already present
-. "$HOME/.local/bin/env"
+if [ -f "$HOME/.local/bin/env" ]; then
+    . "$HOME/.local/bin/env"
+fi
 
-# Shell integrations
-eval "$(mise activate bash)"
-export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
-source <(carapace _carapace)
-export FZF_DEFAULT_OPTS='--height 10 --border'
-eval "$(fzf --bash)"
-eval "$(zoxide init bash)"
-eval "$(atuin init bash --disable-up-arrow)"
+# Shell integrations — guarded so they work on any machine
+if command -v mise &>/dev/null; then
+    eval "$(mise activate bash)"
+fi
+if command -v carapace &>/dev/null; then
+    export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense'
+    source <(carapace _carapace)
+fi
+if command -v fzf &>/dev/null; then
+    export FZF_DEFAULT_OPTS='--height 10 --border'
+    eval "$(fzf --bash)"
+fi
+if command -v zoxide &>/dev/null; then
+    eval "$(zoxide init bash)"
+fi
+if command -v atuin &>/dev/null; then
+    eval "$(atuin init bash --disable-up-arrow)"
+fi
 
 # Fix PROMPT_COMMAND — normalize double semicolons from hook collisions
 PROMPT_COMMAND="$(echo "$PROMPT_COMMAND" | sed "s/[[:space:]]*;/;/g; s/;;/;/g; s/;*$//")"
