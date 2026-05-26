@@ -23,6 +23,13 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 
+# Map hostname to short machine name for PS1
+case $(hostname -s) in
+    VM-0-14-ubuntu) MACHINE_NAME=tencent ;;
+    vps-54d8901a)   MACHINE_NAME=ovh ;;
+    *)              MACHINE_NAME=$(hostname -s) ;;
+esac
+
 # colored prompt
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
