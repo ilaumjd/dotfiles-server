@@ -27,3 +27,6 @@
 	email = "ilaumjd@gmail.com"
 	name = "ilaumjd"
 	signingKey = "~/.ssh/id_ed25519"
+
+[include]
+	path = ~/.gitconfig.local

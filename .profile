@@ -17,3 +17,5 @@ if [ -d "$HOME/bin" ] ; then
 fi
 
 
+
+export PATH="$HOME/.local/bin:$PATH"

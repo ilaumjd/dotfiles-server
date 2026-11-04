@@ -1,1 +1,1 @@
-PATH DEFAULT=${PATH}:/home/ubuntu/.local/share/mise/shims
+PATH DEFAULT=${PATH}:@{HOME}/.local/share/mise/shims

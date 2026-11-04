@@ -32,7 +32,7 @@ esac
 
 # colored prompt
 case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
+    xterm-color|*-256color|xterm-ghostty|rio) color_prompt=yes;;
 esac
 
 if [ -n "$force_color_prompt" ]; then
@@ -112,3 +112,11 @@ fi
 
 # Fix PROMPT_COMMAND — normalize double semicolons from hook collisions
 PROMPT_COMMAND="$(echo "$PROMPT_COMMAND" | sed "s/[[:space:]]*;/;/g; s/;;/;/g; s/;*$//")"
+
+# Use the system-wide rootful Podman socket by default
+export CONTAINER_HOST=unix:///run/podman/podman.sock
+
+# Clear Herdr agent status when Maki exits.
+if [ -f "$HOME/.config/maki/herdr-shell.bash" ]; then
+    source "$HOME/.config/maki/herdr-shell.bash"
+fi
