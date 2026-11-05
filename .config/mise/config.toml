@@ -25,4 +25,3 @@ make = "latest"
 yt-dlp = { version = "latest", rename_exe = "yt-dlp" }
 git-lfs = "latest"
 sqlite = "latest"
-oh-my-pi = { version = "latest", rename_exe = "omp" }
