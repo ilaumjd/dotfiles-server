@@ -49,15 +49,26 @@ def main():
     if backup:
         print(f'Previous files saved in {backup}')
     if args.install:
-        mise = shutil.which('mise') or str(home / '.local/bin/mise')
+        local_mise = home / '.local/bin/mise'
+        mise = str(local_mise) if local_mise.is_file() else shutil.which('mise')
+        if not mise:
+            raise FileNotFoundError('Install mise before running --install')
         tools = tomllib.loads((repo / '.config/mise/config.toml').read_text())['tools']
-        versions = [f'pi@{tools["pi"]}',
+        pi_tool = f'github:earendil-works/pi@{tools["github:earendil-works/pi"]}'
+        versions = [pi_tool,
                     f'github:tontinton/maki@{tools["github:tontinton/maki"]}']
         subprocess.run([mise, 'install', *versions], cwd=repo, check=True)
         subprocess.run([mise, 'reshim'], cwd=repo, check=True)
-        # Only reconcile extensions; do not update the pinned Pi executable.
-        subprocess.run([mise, 'exec', '--', 'pi', 'update', '--extensions'],
-                       cwd=home, env={**os.environ, 'CI': '1'}, check=True)
+        # Invoke the installed executable directly: `mise exec` may install every
+        # missing global tool or pick an unrelated `pi` from the system PATH.
+        pi_root = Path(subprocess.check_output([mise, 'where', pi_tool], text=True).strip())
+        pi = next(p for p in [pi_root / 'pi', pi_root / 'pi/pi'] if p.is_file())
+        node_root = Path(subprocess.check_output(
+            [mise, 'where', f'node@{tools["node"]}'], text=True).strip())
+        env = {**os.environ, 'CI': '1',
+               'PATH': str(node_root / 'bin') + os.pathsep + os.environ.get('PATH', '')}
+        subprocess.run([str(pi), 'update', '--extensions'],
+                       cwd=home, env=env, check=True)
 
 
 if __name__ == '__main__':
