@@ -1,1 +1,17 @@
 /.config/mise/github_tokens.toml
+
+# Agent credentials and runtime state stay local.
+/.pi/agent/*
+!/.pi/agent/settings.json
+!/.pi/agent/extensions/
+/.pi/agent/extensions/*
+!/.pi/agent/extensions/herdr-agent-state.ts
+/.config/maki/*
+!/.config/maki/init.lua
+!/.config/maki/plugin.toml
+!/.config/maki/permissions.toml
+!/.config/maki/herdr-shell.bash
+!/.config/maki/lua/
+/.config/maki/lua/*
+!/.config/maki/lua/herdr_status.lua
+**/__pycache__/

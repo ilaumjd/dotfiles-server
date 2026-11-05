@@ -1,0 +1,38 @@
+[websearch]
+allow = [
+    "Maki CLI coding agent context compaction memory",
+    "mirrorsorcerer install how to use",
+]
+
+[bash]
+allow = [
+    "grep *",
+    "echo *",
+    "find *",
+    "xargs *",
+    "docker *",
+    "tail *",
+    "cd *",
+    "lsblk *",
+    "ls *",
+    'for p in /dev/sdb1 /dev/sdb2 /dev/sdb3 /dev/sdc1 /dev/sdc2; do echo "== $p"; ls -la /media/$USER 2>/dev/null | head -0; done',
+    "findmnt *",
+    'for d in sdb2 sdb3 sdc1; do echo "== $d"; udisksctl mount -b /dev/$d --options ro 2>&1; done',
+    "mkdir *",
+    "sudo *",
+    'for d in sdb2 sdb3 sdc1; do echo "== $d"; ls -la /tmp/usbcheck/$d 2>&1 | head -40; done',
+    "rmdir *",
+    "id *",
+    "uname *",
+    "head *",
+    "command *",
+    "which *",
+    "rpm *",
+    "zypper *",
+    "wc *",
+    "cat *",
+    "getent *",
+    "ip *",
+    '''for u in https://pkgs.tailscale.com/stable/fedora/repodata/repomd.xml.key https://pkgs.tailscale.com/stable/fedora/repodata/repomd.xml.asc https://pkgs.tailscale.com/stable/fedora/repo.gpg; do echo "== $u"; curl -sS -o out.bin -w "%{http_code} %{content_type}\n" "$u"; file out.bin; head -c 120 out.bin | tr -c '[:print:]\n' '.'; echo; done''',
+    "git *",
+]
