@@ -35,15 +35,15 @@ loads only when `~/.config/maki/herdr-shell.bash` exists.
 
 ## Pi and Maki
 
-Pi and Maki use the same configuration on both servers. Their versions and Pi
-package versions are pinned to keep installs consistent. To apply after pulling:
+Pi and Maki share configuration across both servers. Mise manages their tool
+versions independently; the configuration sync does not install or pin tools
+or Pi packages. To apply after pulling:
 
 ```sh
-python3 ~/dotfiles/scripts/setup-agents.py --install
+python3 ~/dotfiles/scripts/setup-agents.py
 ```
 
-The script backs up replaced configuration files before linking them. Omit
-`--install` to update links without downloading tools or packages. Pi uses the
+The script backs up replaced configuration files before linking them. Pi uses the
 shared `~/.pi/agent/settings.json` and Herdr extension. Maki uses the shared
 `~/.config/maki` Lua configuration, permission rules, manifest, and shell hook.
 Maki defaults to Opus with the Rose Pine Moon theme; Pi keeps Tiny's existing
