@@ -2,6 +2,7 @@
 """Link shared agent configuration; optionally install tools and Pi packages."""
 
 import argparse
+import json
 import os
 from pathlib import Path
 import shutil
@@ -50,7 +51,10 @@ def main():
         print(f'Previous files saved in {backup}')
     if args.install:
         local_mise = home / '.local/bin/mise'
-        mise = str(local_mise) if local_mise.is_file() else shutil.which('mise')
+        # A Snap command in /snap/bin is a launcher; use its actual executable.
+        snap_mise = Path('/snap/mise/current/bin/mise')
+        mise = (str(snap_mise) if snap_mise.is_file() else
+                str(local_mise) if local_mise.is_file() else shutil.which('mise'))
         if not mise:
             raise FileNotFoundError('Install mise before running --install')
         tools = tomllib.loads((repo / '.config/mise/config.toml').read_text())['tools']
@@ -59,6 +63,15 @@ def main():
                     f'github:tontinton/maki@{tools["github:tontinton/maki"]}']
         subprocess.run([mise, 'install', *versions], cwd=repo, check=True)
         subprocess.run([mise, 'reshim'], cwd=repo, check=True)
+        # Snap's launcher cannot dispatch shims named after another executable.
+        # Use the native mise executable for these two command shims.
+        native_mise = Path(mise)
+        for command in ('pi', 'maki'):
+            shim = home / '.local/share/mise/shims' / command
+            if shim.is_symlink():
+                shim.unlink()
+            if not shim.exists():
+                shim.symlink_to(native_mise)
         # Invoke the installed executable directly: `mise exec` may install every
         # missing global tool or pick an unrelated `pi` from the system PATH.
         pi_root = Path(subprocess.check_output([mise, 'where', pi_tool], text=True).strip())
@@ -67,8 +80,15 @@ def main():
             [mise, 'where', f'node@{tools["node"]}'], text=True).strip())
         env = {**os.environ, 'CI': '1',
                'PATH': str(node_root / 'bin') + os.pathsep + os.environ.get('PATH', '')}
-        subprocess.run([str(pi), 'update', '--extensions'],
-                       cwd=home, env=env, check=True)
+        packages = json.loads((repo / '.pi/agent/settings.json').read_text())['packages']
+        for package in packages:
+            name, version = package.removeprefix('npm:').rsplit('@', 1)
+            installed = home / '.pi/agent/npm/node_modules' / name / 'package.json'
+            if installed.is_file() and json.loads(installed.read_text())['version'] == version:
+                print(f'Already installed: {package}')
+                continue
+            subprocess.run([str(pi), 'install', package],
+                           cwd=home, env=env, check=True)
 
 
 if __name__ == '__main__':
